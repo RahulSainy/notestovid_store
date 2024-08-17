@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Information Form</title>
+  <style>body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.info-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.slides-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+}
+
+.slide img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.image-desc {
+    font-style: italic;
+    color: #666;
+    margin-top: 5px;
+}
+
+.narration {
+    background: #eee;
+    border-left: 5px solid #4CAF50;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.content {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.content li {
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #333;
+}
+
+.navigation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+</style>
+</head>
+<body>
+  
+    <div class="container">
+        <form class="info-form">
+            <h1>Software Information</h1>
+            <div class="slides-container" id="slides-container">
+                <!-- Slides will be dynamically inserted here -->
+            </div>
+            <div class="navigation">
+                <button id="prev-btn" onclick="navigateSlides(-1)">Previous</button>
+                <button id="next-btn" onclick="navigateSlides(1)">Next</button>
+            </div>
+        </form>
+    </div>
+    <script> // JavaScript for loading JSON and handling slide navigation
+const jsonData = {
+    "content": [
+        
+    {
+        "title": "Television: A Window to the World",
+        "content": [
+            "- Television is a powerful medium that provides entertainment, information, and education.",
+            "It allows us to connect with people and events from around the globe.",
+            "It can be a source of news, sports, movies, and TV shows."
+        ],
+        "image_desc": "A modern flat-screen television with a variety of channels displayed on the screen.",
+        "narration": "टेलीविजन एक बहुत ही शक्तिशाली माध्यम है जो मनोरंजन, जानकारी और शिक्षा प्रदान करता है। यह हमें दुनिया भर के लोगों और घटनाओं से जोड़ने की अनुमति देता है। यह समाचार, खेल, फिल्में और टीवी शो का स्रोत हो सकता है।",
+        "slide_number": "1",
+        "image_url": "https://m.media-amazon.com/images/I/81pieXC63IL._AC_UF1000,1000_QL80_.jpg"
+    },
+    {
+        "title": "The Evolution of Television",
+        "content": [
+            "- Television has evolved significantly since its inception.",
+            "From bulky black and white sets to sleek high-definition screens, technology has transformed the viewing experience.",
+            "Today, streaming services and on-demand content have revolutionized how we consume television."
+        ],
+        "image_desc": "A vintage black and white television set next to a modern smart TV with a streaming service logo displayed on the screen.",
+        "narration": "टेलीविजन अपनी शुरुआत से ही काफी विकसित हुआ है। भारी काले और सफेद सेट से लेकर स्लीक हाई-डेफिनेशन स्क्रीन तक, तकनीक ने देखने के अनुभव को बदल दिया है। आज, स्ट्रीमिंग सेवाओं और ऑन-डिमांड सामग्री ने क्रांति ला दी है कि हम टेलीविजन कैसे देखते हैं।",
+        "slide_number": "2",
+        "image_url": "https://www.shutterstock.com/shutterstock/photos/760151383/display_1500/stock-vector-fake-tv-channel-logo-set-includes-business-travel-news-comedy-retro-music-sport-and-animals-760151383.jpg"
+    }
+
+    ],
+    "status": "success",
+    "unique_id": "7706f951-8e00-424d-a15b-0f4e8b1791ce"
+};
+
+let currentSlideIndex = 0;
+
+function renderSlides() {
+    const container = document.getElementById('slides-container');
+    container.innerHTML = ''; // Clear existing slides
+    
+    jsonData.content.forEach((slide, index) => {
+        const slideElement = document.createElement('section');
+        slideElement.className = 'slide';
+        slideElement.dataset.slide = slide.slide_number;
+        if (index === 0) slideElement.style.display = 'block'; // Show first slide
+
+        slideElement.innerHTML = `
+            <h2>${slide.title}</h2>
+            <img src="${slide.image_url}" alt="Slide Image">
+            <p class="image-desc">${slide.image_desc}</p>
+            <p class="narration">${slide.narration}</p>
+            <ul class="content">
+                ${slide.content.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        `;
+
+        container.appendChild(slideElement);
+    });
+}
+
+function navigateSlides(direction) {
+    const slides = document.querySelectorAll('.slide');
+    slides[currentSlideIndex].style.display = 'none';
+    currentSlideIndex += direction;
+    
+    if (currentSlideIndex < 0) currentSlideIndex = 0;
+    if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
+    
+    slides[currentSlideIndex].style.display = 'block';
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    document.getElementById('prev-btn').disabled = currentSlideIndex === 0;
+    document.getElementById('next-btn').disabled = currentSlideIndex === jsonData.content.length - 1;
+}
+
+// Initialize the slides
+renderSlides();
+updateNavigationButtons();
+</script>
+</body>
+</html>
